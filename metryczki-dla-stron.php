@@ -64,7 +64,7 @@ function metryczki_settings_page()
                 <tr>
                     <th scope="row"><label for="metryczki_table_classes">Klasy tabelki</label></th>
                     <td>
-                        <input type="text" id="metryczki_table_classes" name="metryczki_table_classes" value="<?php echo esc_attr($table_classes); ?>" class="form-control" />
+                        <input type="text" id="metryczki_table_classes" name="metryczki_table_classes" value="<?php echo esc_attr($table_classes); ?>" class="form-control code" />
                         <p class="description">Podaj klasy, które zostaną dodane do <code>&lt;table&gt;</code>. Domyślnie <code><?php echo esc_html($default_classes); ?></code>.</p>
                     </td>
                 </tr>
