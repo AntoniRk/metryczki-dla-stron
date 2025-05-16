@@ -4,11 +4,13 @@
 
 ### Instalacja
 
-Pobierz ZIP, następnie w WordPress wybierz opcję **Wtyczki > Dodaj wtyczkę**, wybierz ZIP.  
+Pobierz ZIP, następnie w WordPress wybierz opcję **Wtyczki > Dodaj wtyczkę**, wybierz ZIP. 
+
 Alternatywnie rozpakowany folder z wtyczką wrzuć w pliki serwera:  
 *nazwa_wordpressa/wp-content/plugins*
 
 **Technologie:** PHP, JavaScript
+
 Wtyczka polega na stworzeniu odpowiedniej metryczki, dla każdego odnośnika spełniającego wprowadzone wymagania.
 
 ---
