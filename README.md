@@ -19,5 +19,6 @@ Wtyczka polega na stworzeniu odpowiedniej metryczki, dla każdego odnośnika spe
 
 ### metryczki-dla-stron.php
 Główny plik, dołączanie wymaganych technologii
+
 Działanie na stronie - pobranie wszystkich danych z WordPressa dotyczących stworzenia i modyfikacji strony,
 znalezienie elementu odpowiedzialnego za wyświetlenie liczby odwiedzin, pobranie wartości i zamiana elementu na tabelkę z tymi danymi.
