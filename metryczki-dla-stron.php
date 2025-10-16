@@ -6,17 +6,17 @@ Version: 1.6
 Author: Antoni Roskosz
 */
 
-$default_css = ".mn-mn table { 
+$default_css = ".mn-bip-elementor table { 
     border-collapse: collapse; 
     width: 100%; 
     margin: 0 auto;
     margin-top: 1em; 
     border: none;
 }
-.mn-mn table td {padding: 4px; border-top: 1px solid #003c7d;}
-.mn-mn table td:nth-child(even){font-weight: bold;}
-.mn-mn table tr:nth-child(odd) {background-color: #f2f2f2;}
-.mn-mn table tr:last-child {border-bottom: 1px solid #003c7d;}";
+.mn-bip-elementor table td {padding: 4px; border-top: 1px solid #003c7d;}
+.mn-bip-elementor table td:nth-child(even){font-weight: bold;}
+.mn-bip-elementor table tr:nth-child(odd) {background-color: #f2f2f2;}
+.mn-bip-elementor table tr:last-child {border-bottom: 1px solid #003c7d;}";
 $default_classes = '';
 
 add_action('admin_init', function () {
@@ -79,7 +79,7 @@ function metryczki_settings_page()
             <?php submit_button(); ?>
         </form>
         <h2>Podgląd tabelki</h2>
-        <div class="mn-mn" id="metryczki-preview-wrapper">
+        <div class="mn-bip-elementor" id="metryczki-preview-wrapper">
             <!-- tu tabelka -->
         </div>
     </div>
@@ -191,7 +191,7 @@ add_action('wp_footer', function () {
                 $('<td>').text(value).appendTo($tr);
                 $tbl.append($tr);
             });
-            $('.mn-mn').append($tbl);
+            $('.mn-bip-elementor').append($tbl);
         });
     </script>
 <?php
