@@ -17,9 +17,11 @@ Alternatywnie rozpakowany folder z wtyczką wrzuć w pliki serwera:
 ## Struktura kodu
 - domyślne wartości css
 - dodanie akcji wordpress
+- zawarcie potrzebnych technologii
 - strona ustawień:
   - pole i przycisk do wyglądu
   - pole na klasy
   - podgląd zmian w stylu na żywo
-- funkcja wczytująca dane o stronie z bazy wordpress i znalezienie pozycji zawierającej pole z liczbą wizyt na stronę
-- skrypt wykorzystujący jQuery do wstawienia tych danych do tabelki
+- główna funkcja
+  - wczytywanie danych o stronie z bazy wordpress i znalezienie pozycji zawierającej pole z liczbą wizyt na stronę
+  - skrypt wykorzystujący jQuery do wstawienia tych danych do tabelki
