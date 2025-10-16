@@ -1,6 +1,11 @@
-# Projekt metryczki dla stron (JESZCZE W TRAKCIE FINALIZACJI)
+# Projekt metryczki dla stron
 
 ### Wtyczka stworzona dla witryny bip.polsl.pl
+
+**Technologie:** PHP, JavaScript
+
+Wtyczka generuje odpowiednią metryczkę na dole każdej strony zawartej na witrynie.
+Każda metryczka jest w większości modyfikowalna, czyli w ustawieniach wtyczki da się ustawić jej wygląd i ustawić alternatywne klasy.
 
 ### Instalacja
 
@@ -9,16 +14,12 @@ Pobierz ZIP, następnie w WordPress wybierz opcję **Wtyczki > Dodaj wtyczkę**,
 Alternatywnie rozpakowany folder z wtyczką wrzuć w pliki serwera:  
 *nazwa_wordpressa/wp-content/plugins*
 
-**Technologie:** PHP, JavaScript
-
-Wtyczka polega na stworzeniu odpowiedniej metryczki, dla każdego odnośnika spełniającego wprowadzone wymagania.
-
----
-
-## Dokumentacja (JESZCZE SIĘ POZMIENIA)
-
-### metryczki-dla-stron.php
-Główny plik, dołączanie wymaganych technologii
-
-Działanie na stronie - pobranie wszystkich danych z WordPressa dotyczących stworzenia i modyfikacji strony,
-znalezienie elementu odpowiedzialnego za wyświetlenie liczby odwiedzin, pobranie wartości i zamiana elementu na tabelkę z tymi danymi.
+## Struktura kodu
+-domyślne wartości css
+-dodanie akcji wordpress
+-strona ustawień:
+  -pole i przycisk do wyglądu
+  -pole na klasy
+  -podgląd zmian w stylu na żywo
+-funkcja wczytująca dane o stronie z bazy wordpress i znalezienie pozycji zawierającej pole z liczbą wizyt na stronę
+-skrypt wykorzystujący jQuery do wstawienia tych danych do tabelki
