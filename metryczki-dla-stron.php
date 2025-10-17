@@ -6,18 +6,18 @@ Version: 1.6
 Author: Antoni Roskosz
 */
 
-$default_css = ".mn-bip-elementor table { 
+$default_css = ".mn-bip-elementor .metryczkaStrony { 
     border-collapse: collapse; 
     width: 100%; 
     margin: 0 auto;
     margin-top: 1em; 
     border: none;
 }
-.mn-bip-elementor table td {padding: 4px; border-top: 1px solid #003c7d;}
-.mn-bip-elementor table td:nth-child(even){font-weight: bold;}
-.mn-bip-elementor table tr:nth-child(odd) {background-color: #f2f2f2;}
-.mn-bip-elementor table tr:last-child {border-bottom: 1px solid #003c7d;}";
-$default_classes = '';
+.mn-bip-elementor .metryczkaStrony td {padding: 4px; border-top: 1px solid #003c7d;}
+.mn-bip-elementor .metryczkaStrony td:nth-child(even){font-weight: bold;}
+.mn-bip-elementor .metryczkaStrony tr:nth-child(odd) {background-color: #f2f2f2;}
+.mn-bip-elementor .metryczkaStrony tr:last-child {border-bottom: 1px solid #003c7d;}";
+$default_classes = 'metryczkaStrony';
 
 add_action('admin_init', function () {
     register_setting('metryczki_options_group', 'metryczki_custom_css');
