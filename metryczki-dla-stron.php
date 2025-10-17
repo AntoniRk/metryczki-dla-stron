@@ -22,7 +22,10 @@ $default_classes = 'metryczkaStrony';
 add_action('admin_init', function () {
     register_setting('metryczki_options_group', 'metryczki_custom_css');
     register_setting('metryczki_options_group', 'metryczki_table_classes');
+    register_setting('metryczki_options_group', 'metryczki_enable_custom_selector');
+    register_setting('metryczki_options_group', 'metryczki_custom_selector');
 });
+
 
 // Dodanie strony ustawień w menu
 add_action('admin_menu', function () {
@@ -42,12 +45,13 @@ add_action('admin_enqueue_scripts', function ($hook) {
     wp_enqueue_script('bootstrap-js-admin', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js', ['jquery'], '5.3.0', true);
 });
 
-// Strona ustawień
 function metryczki_settings_page()
 {
     global $default_css, $default_classes;
     $custom_css     = get_option('metryczki_custom_css', $default_css);
     $table_classes  = get_option('metryczki_table_classes', $default_classes);
+    $enable_selector = get_option('metryczki_enable_custom_selector', false);
+    $custom_selector = get_option('metryczki_custom_selector', '.mn-bip-elementor');
 ?>
     <div class="wrap">
         <h1>Metryczki stron - Ustawienia</h1>
@@ -66,6 +70,18 @@ function metryczki_settings_page()
                     <td>
                         <input type="text" id="metryczki_table_classes" name="metryczki_table_classes" value="<?php echo esc_attr($table_classes); ?>" class="form-control code" />
                         <p class="description">Podaj klasy, które zostaną dodane do <code>&lt;table&gt;</code>. Domyślnie <code><?php echo esc_html($default_classes); ?></code>.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Lokalizacja metryczki</th>
+                    <td>
+                        <label>
+                            <input type="checkbox" id="metryczki_enable_custom_selector" name="metryczki_enable_custom_selector" value="1" <?php checked($enable_selector, 1); ?>>
+                            Użyj własnego selektora
+                        </label>
+                        <br>
+                        <input style="margin-top: 4px;" type="text" id="metryczki_custom_selector" name="metryczki_custom_selector" value="<?php echo esc_attr($custom_selector); ?>" class="form-control code" <?php disabled(!$enable_selector); ?> />
+                        <p class="description">Domyślnie <code>.mn-bip-elementor</code>. Włącz, aby zmienić lokalizację, gdzie wstawiana jest metryczka.</p>
                     </td>
                 </tr>
                 <tr>
@@ -115,14 +131,19 @@ function metryczki_settings_page()
                 });
                 $('#metryczki-preview-wrapper').append($tbl);
             }
+
             $(function() {
                 renderPreview();
                 $('#metryczki_custom_css, #metryczki_table_classes').on('input', renderPreview);
-                // OBSŁUGA PRZYCISKU RESETUJ:
                 $('#metryczki-reset-css').on('click', function() {
                     $('#metryczki_custom_css').val(defaultCss);
                     $('#metryczki_table_classes').val(defaultClasses);
                     renderPreview();
+                });
+
+                // obsługa checkboxa i pola lokalizacji
+                $('#metryczki_enable_custom_selector').on('change', function() {
+                    $('#metryczki_custom_selector').prop('disabled', !this.checked);
                 });
             });
         })(jQuery);
@@ -172,6 +193,11 @@ add_action('wp_footer', function () {
         'Liczba odwiedzin:'       => null,
     ];
     $json = wp_json_encode($data);
+
+    // pobranie ustawień selektora
+    $enable_selector = get_option('metryczki_enable_custom_selector', false);
+    $custom_selector = get_option('metryczki_custom_selector', '.mn-bip-elementor');
+    $selector = $enable_selector ? $custom_selector : '.mn-bip-elementor';
 ?>
     <script>
         jQuery(function($) {
@@ -194,7 +220,8 @@ add_action('wp_footer', function () {
                 $('<td>').text(value).appendTo($tr);
                 $tbl.append($tr);
             });
-            $('.mn-bip-elementor').last().append($tbl);
+
+            $(`<?php echo esc_js($selector); ?>`).last().append($tbl);
         });
     </script>
 <?php
