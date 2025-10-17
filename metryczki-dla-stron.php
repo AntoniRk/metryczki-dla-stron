@@ -194,7 +194,7 @@ add_action('wp_footer', function () {
                 $('<td>').text(value).appendTo($tr);
                 $tbl.append($tr);
             });
-            $('.mn-bip-elementor').append($tbl);
+            $('.mn-bip-elementor').last().append($tbl);
         });
     </script>
 <?php
