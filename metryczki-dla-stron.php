@@ -155,7 +155,7 @@ add_action('wp_enqueue_scripts', function () {
 });
 
 add_action('wp_footer', function () {
-    if (! (is_page() || is_single())) return;
+    if (!(is_page() || is_single())) return;
     global $post;
 
     $data = [
@@ -171,17 +171,20 @@ add_action('wp_footer', function () {
             : '',
         'Liczba odwiedzin:'       => null,
     ];
-    $json           = wp_json_encode($data);
+    $json = wp_json_encode($data);
 ?>
     <script>
         jQuery(function($) {
             var meta = <?php echo $json; ?>;
             var txt = $('.mn-mn').text();
             var m = txt.match(/Liczba odwiedzin\D*([\d ]+)/i);
-            meta['Liczba odwiedzin:'] = m ? m[1].replace(/\s+/g, '') : '—';
+            var visits = m ? m[1].replace(/\s+/g, '') : null;
+            if (visits !== null) meta['Liczba odwiedzin:'] = visits;
+
             $('.mn-mn').find('p').filter(function() {
                 return /^Liczba odwiedzin/i.test($(this).text().trim());
             }).remove();
+
             $('<style>').text(`<?php echo get_option('metryczki_custom_css'); ?>`).appendTo('head');
             var $tbl = $('<table>').addClass('<?php echo get_option('metryczki_table_classes'); ?>');
             $.each(meta, function(label, value) {
