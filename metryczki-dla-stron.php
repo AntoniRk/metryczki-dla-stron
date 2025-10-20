@@ -18,12 +18,21 @@ $default_css = ".mn-bip-elementor .metryczkaStrony {
 .mn-bip-elementor .metryczkaStrony tr:nth-child(odd) {background-color: #f2f2f2;}
 .mn-bip-elementor .metryczkaStrony tr:last-child {border-bottom: 1px solid #003c7d;}";
 $default_classes = 'metryczkaStrony';
+$default_selector = '.mn-bip-elementor';
 
 add_action('admin_init', function () {
     register_setting('metryczki_options_group', 'metryczki_custom_css');
     register_setting('metryczki_options_group', 'metryczki_table_classes');
-    register_setting('metryczki_options_group', 'metryczki_enable_custom_selector');
-    register_setting('metryczki_options_group', 'metryczki_custom_selector');
+    register_setting('metryczki_options_group', 'metryczki_custom_selector', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+        'default' => '.mn-bip-elementor'
+    ]);
+    register_setting('metryczki_options_group', 'metryczki_enable_custom_selector', [
+        'type' => 'boolean',
+        'sanitize_callback' => 'rest_sanitize_boolean',
+        'default' => false
+    ]);
 });
 
 
@@ -47,31 +56,20 @@ add_action('admin_enqueue_scripts', function ($hook) {
 
 function metryczki_settings_page()
 {
-    global $default_css, $default_classes;
-    $custom_css     = get_option('metryczki_custom_css', $default_css);
-    $table_classes  = get_option('metryczki_table_classes', $default_classes);
+    global $default_css, $default_classes, $default_selector;
+    $custom_css      = get_option('metryczki_custom_css', $default_css);
+    $table_classes   = get_option('metryczki_table_classes', $default_classes);
     $enable_selector = get_option('metryczki_enable_custom_selector', false);
-    $custom_selector = get_option('metryczki_custom_selector', '.mn-bip-elementor');
+    $custom_selector = trim(get_option('metryczki_custom_selector'));
+    if ($custom_selector === '') {
+        $custom_selector = $default_selector;
+    }
 ?>
     <div class="wrap">
         <h1>Metryczki stron - Ustawienia</h1>
         <form method="post" action="options.php">
             <?php settings_fields('metryczki_options_group'); ?>
             <table class="form-table table">
-                <tr>
-                    <th scope="row"><label for="metryczki_custom_css">Własny CSS tabelki</label></th>
-                    <td>
-                        <textarea id="metryczki_custom_css" name="metryczki_custom_css" rows="10" cols="50" class="form-control code"><?php echo esc_textarea($custom_css); ?></textarea>
-                        <p class="description">Wklej kod CSS dla generowanej tabelki metryczek.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="metryczki_table_classes">Klasy tabelki</label></th>
-                    <td>
-                        <input type="text" id="metryczki_table_classes" name="metryczki_table_classes" value="<?php echo esc_attr($table_classes); ?>" class="form-control code" />
-                        <p class="description">Podaj klasy, które zostaną dodane do <code>&lt;table&gt;</code>. Domyślnie <code><?php echo esc_html($default_classes); ?></code>.</p>
-                    </td>
-                </tr>
                 <tr>
                     <th scope="row">Lokalizacja metryczki</th>
                     <td>
@@ -82,6 +80,20 @@ function metryczki_settings_page()
                         <br>
                         <input style="margin-top: 4px;" type="text" id="metryczki_custom_selector" name="metryczki_custom_selector" value="<?php echo esc_attr($custom_selector); ?>" class="form-control code" <?php disabled(!$enable_selector); ?> />
                         <p class="description">Domyślnie <code>.mn-bip-elementor</code>. Włącz, aby zmienić lokalizację, gdzie wstawiana jest metryczka.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="metryczki_table_classes">Klasy tabelki</label></th>
+                    <td>
+                        <input type="text" id="metryczki_table_classes" name="metryczki_table_classes" value="<?php echo esc_attr($table_classes); ?>" class="form-control code" />
+                        <p class="description">Podaj klasy, które zostaną dodane do <code>&lt;table&gt;</code>. Domyślnie <code><?php echo esc_html($default_classes); ?></code>.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="metryczki_custom_css">Własny CSS tabelki</label></th>
+                    <td>
+                        <textarea id="metryczki_custom_css" name="metryczki_custom_css" rows="10" cols="50" class="form-control code"><?php echo esc_textarea($custom_css); ?></textarea>
+                        <p class="description">Wklej kod CSS dla generowanej tabelki metryczek.</p>
                     </td>
                 </tr>
                 <tr>
@@ -103,6 +115,7 @@ function metryczki_settings_page()
         (function($) {
             var defaultCss = `<?php echo str_replace("`", "\\`", $default_css); ?>`;
             var defaultClasses = '<?php echo esc_js($default_classes); ?>';
+            var defaultSelector = '<?php echo esc_js($default_selector); ?>';
 
             function renderPreview() {
                 var css = $('#metryczki_custom_css').val();
@@ -138,6 +151,8 @@ function metryczki_settings_page()
                 $('#metryczki-reset-css').on('click', function() {
                     $('#metryczki_custom_css').val(defaultCss);
                     $('#metryczki_table_classes').val(defaultClasses);
+                    $('#metryczki_custom_selector').val(defaultSelector);
+                    $('#metryczki_enable_custom_selector').prop('checked', false).trigger('change');
                     renderPreview();
                 });
 
