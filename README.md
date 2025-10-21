@@ -19,8 +19,9 @@ Alternatywnie rozpakowany folder z wtyczką wrzuć w pliki serwera:
 - dodanie akcji wordpress
 - zawarcie potrzebnych technologii
 - strona ustawień:
-  - pole i przycisk do wyglądu
+  - checkbox i pole na zmianę lokalizacji
   - pole na klasy
+  - pole do zmiany wyglądu
   - checkbox i pole na ewentualną zmianę lokalizacji metryczki
   - podgląd zmian w stylu na żywo
 - główna funkcja
