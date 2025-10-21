@@ -2,7 +2,7 @@
 /*
 Plugin Name: Metryczki dla stron
 Description: Generator <strong>metryczek</strong> dla stron (do elementu o klasie mn-mn) z możliwością dodania własnego CSS i klas tabelki w ustawieniach.
-Version: 1.6
+Version: 1.0
 Author: Antoni Roskosz
 */
 
