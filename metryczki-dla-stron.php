@@ -201,7 +201,7 @@ add_action('wp_footer', function () {
         'Data publikacji:'        => mysql2date('d-m-Y H:i', $post->post_date),
         'Ostatnio zaktualizował:' => mysql2date('d-m-Y H:i', $post->post_date) !== mysql2date('d-m-Y H:i', $post->post_modified)
             ? get_the_modified_author()
-            : 'brak',
+            : '',
         'Data aktualizacji:'      => mysql2date('d-m-Y H:i', $post->post_date) !== mysql2date('d-m-Y H:i', $post->post_modified)
             ? mysql2date('d-m-Y H:i', $post->post_modified)
             : '',
