@@ -77,6 +77,14 @@ function metryczki_settings_page()
             <?php settings_fields('metryczki_options_group'); ?>
             <table class="form-table table">
                 <tr>
+                    <th scope="row"><label for="metryczki_excluded_urls">Wykluczone adresy URL</label></th>
+                    <td>
+                        <textarea id="metryczki_excluded_urls" name="metryczki_excluded_urls" rows="5" cols="50" class="form-control code"><?php echo esc_textarea($excluded_urls); ?></textarea>
+                        <p class="description">Wpisz fragmenty adresów URL (po jednym w linii), które mają być wykluczone z wyświetlania metryczki.<br>
+                            Np. <code>zamowienia-publiczne</code> wykluczy wszystkie strony zawierające ten fragment w adresie URL.</p>
+                    </td>
+                </tr>
+                <tr>
                     <th scope="row">Lokalizacja metryczki</th>
                     <td>
                         <label>
@@ -86,14 +94,6 @@ function metryczki_settings_page()
                         <br>
                         <input style="margin-top: 4px;" type="text" id="metryczki_custom_selector" name="metryczki_custom_selector" value="<?php echo esc_attr($custom_selector); ?>" class="form-control code" <?php disabled(!$enable_selector); ?> />
                         <p class="description">Domyślnie <code>.mn-bip-elementor</code>. Włącz, aby zmienić lokalizację, gdzie wstawiana jest metryczka.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row"><label for="metryczki_excluded_urls">Wykluczone adresy URL</label></th>
-                    <td>
-                        <textarea id="metryczki_excluded_urls" name="metryczki_excluded_urls" rows="5" cols="50" class="form-control code"><?php echo esc_textarea($excluded_urls); ?></textarea>
-                        <p class="description">Wpisz fragmenty adresów URL (po jednym w linii), które mają być wykluczone z wyświetlania metryczki.<br>
-                        Np. <code>zamowienia-publiczne</code> wykluczy wszystkie strony zawierające ten fragment w adresie URL.</p>
                     </td>
                 </tr>
                 <tr>
@@ -227,7 +227,7 @@ add_action('wp_footer', function () {
     $enable_selector = get_option('metryczki_enable_custom_selector', false);
     $custom_selector = get_option('metryczki_custom_selector', '.mn-bip-elementor');
     $selector = $enable_selector ? $custom_selector : '.mn-bip-elementor';
-    
+
     // pobranie wykluczonych URL
     $excluded_urls = get_option('metryczki_excluded_urls', '');
     $excluded_array = array_filter(array_map('trim', explode("\n", $excluded_urls)));
@@ -239,13 +239,15 @@ add_action('wp_footer', function () {
             function normalizePrefix(url) {
                 return url.replace(/^https?:\/\//i, '').replace(/^www\./i, '');
             }
-            
+
             // Sprawdzenie wykluczonych stron
             var excludedPages = <?php echo $excluded_json; ?>;
+            excludedPages = excludedPages.toLowerCase();
             var wykluczonaStrona = false;
             var currentUrl = window.location.href;
             var normalizedCurrentUrl = normalizePrefix(currentUrl);
-            
+            normalizedCurrentUrl = normalizedCurrentUrl.toLowerCase();
+
             excludedPages.forEach(function(excludedPage) {
                 var normalizedExcludedPage = normalizePrefix(excludedPage);
                 if (normalizedCurrentUrl.includes(normalizedExcludedPage)) {
@@ -253,12 +255,12 @@ add_action('wp_footer', function () {
                     console.log('Metryczka - strona wykluczona:', excludedPage, 'w URL:', currentUrl);
                 }
             });
-            
+
             if (wykluczonaStrona) {
                 console.log('Metryczka nie zostanie wyświetlona - strona wykluczona');
                 return;
             }
-            
+
             // Kontynuuj normalnie, jeśli strona nie jest wykluczona
             var meta = <?php echo $json; ?>;
             var txt = $('.mn-mn').text();
