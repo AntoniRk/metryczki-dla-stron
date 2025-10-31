@@ -79,9 +79,9 @@ function metryczki_settings_page()
                 <tr>
                     <th scope="row"><label for="metryczki_excluded_urls">Wykluczone adresy URL</label></th>
                     <td>
-                        <textarea id="metryczki_excluded_urls" name="metryczki_excluded_urls" rows="5" cols="50" class="form-control code"><?php echo esc_textarea($excluded_urls); ?></textarea>
-                        <p class="description">Wpisz fragmenty adresów URL (po jednym w linii), które mają być wykluczone z wyświetlania metryczki.<br>
-                            Np. <code>zamowienia-publiczne</code> wykluczy wszystkie strony zawierające ten fragment w adresie URL.</p>
+                        <input type="text" id="metryczki_excluded_urls" name="metryczki_excluded_urls" value="<?php echo esc_attr($excluded_urls); ?>" class="form-control code" style="width: 100%;" />
+                        <p class="description">Wpisz fragmenty adresów URL oddzielone przecinkami, które mają być wykluczone z wyświetlania metryczki.<br>
+                            Np. <code>zamowienia-publiczne, przetargi, kontakt</code> wykluczy wszystkie strony zawierające te fragmenty w adresie URL.</p>
                     </td>
                 </tr>
                 <tr>
@@ -230,34 +230,31 @@ add_action('wp_footer', function () {
 
     // pobranie wykluczonych URL
     $excluded_urls = get_option('metryczki_excluded_urls', '');
-    $excluded_array = array_filter(array_map('trim', explode("\n", $excluded_urls)));
+    $excluded_array = array_filter(array_map('trim', explode(",", $excluded_urls)));
     $excluded_json = wp_json_encode($excluded_array);
 ?>
     <script>
         jQuery(function($) {
             // Funkcja normalizująca prefiksy
             function normalizePrefix(url) {
-                return url.replace(/^https?:\/\//i, '').replace(/^www\./i, '');
+                url = url.replace(/^https?:\/\//i, '').replace(/^www\./i, '');
+                return url.toLowerCase();
             }
 
             // Sprawdzenie wykluczonych stron
             var excludedPages = <?php echo $excluded_json; ?>;
-            excludedPages = excludedPages.toLowerCase();
             var wykluczonaStrona = false;
             var currentUrl = window.location.href;
             var normalizedCurrentUrl = normalizePrefix(currentUrl);
-            normalizedCurrentUrl = normalizedCurrentUrl.toLowerCase();
 
             excludedPages.forEach(function(excludedPage) {
                 var normalizedExcludedPage = normalizePrefix(excludedPage);
                 if (normalizedCurrentUrl.includes(normalizedExcludedPage)) {
                     wykluczonaStrona = true;
-                    console.log('Metryczka - strona wykluczona:', excludedPage, 'w URL:', currentUrl);
                 }
             });
 
             if (wykluczonaStrona) {
-                console.log('Metryczka nie zostanie wyświetlona - strona wykluczona');
                 return;
             }
 
