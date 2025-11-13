@@ -272,7 +272,7 @@ add_action('wp_footer', function () {
             $('<style>').text(`<?php echo get_option('metryczki_custom_css'); ?>`).appendTo('head');
             var $tbl = $('<table>').addClass('<?php echo get_option('metryczki_table_classes'); ?>');
             $.each(meta, function(label, value) {
-                if (value === '' || value === null) return;
+                if (value === '' || value === null) return; //pusta wartość = skip
                 var $tr = $('<tr>');
                 $('<td>').text(label).appendTo($tr);
                 $('<td>').text(value).appendTo($tr);
